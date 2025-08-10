@@ -1,0 +1,22 @@
+# 初始化 Git（如果之前沒 init 過）
+git init
+
+# 新增 .gitignore（避免把 node_modules/.env 推上去）
+echo node_modules/ > .gitignore
+echo dist/ >> .gitignore
+echo .env >> .gitignore
+
+# 把全部檔案加入版本控制
+git add .
+
+# 建第一個提交
+git commit -m "first commit"
+
+# 設定主分支名稱
+git branch -M main
+
+# 加上遠端（把網址換成你 repo 的 HTTPS 位址）
+git remote add origin https://github.com/fongdarachris2-dot/my-chinese-app.git
+
+# 推送到 GitHub
+git push -u origin main

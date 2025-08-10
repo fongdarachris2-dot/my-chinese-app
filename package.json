@@ -1,22 +1,23 @@
-# 初始化 Git（如果之前沒 init 過）
-git init
-
-# 新增 .gitignore（避免把 node_modules/.env 推上去）
-echo node_modules/ > .gitignore
-echo dist/ >> .gitignore
-echo .env >> .gitignore
-
-# 把全部檔案加入版本控制
-git add .
-
-# 建第一個提交
-git commit -m "first commit"
-
-# 設定主分支名稱
-git branch -M main
-
-# 加上遠端（把網址換成你 repo 的 HTTPS 位址）
-git remote add origin https://github.com/fongdarachris2-dot/my-chinese-app.git
-
-# 推送到 GitHub
-git push -u origin main
+{
+  "name": "my-chinese-app",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 4173"
+  },
+  "dependencies": {
+    "firebase": "^10.14.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.0",
+    "typescript": "^5.4.0",
+    "vite": "^4.5.0"
+  }
+}

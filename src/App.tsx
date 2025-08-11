@@ -120,6 +120,10 @@ let app!: FirebaseApp;
 let auth!: Auth;
 let db!: Firestore;
 
+// === 訪客模式（不需要帳密）===
+const GUEST_MODE = true;
+const DEMO_USER = { uid: 'guest-1', email: '訪客模式' };
+
 
 if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     try {
@@ -732,24 +736,36 @@ export default function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!auth) {
-        setLoading(false);
-        return;
+  // 如果是訪客模式，直接用 DEMO_USER
+  if (GUEST_MODE) {
+  setUser(DEMO_USER);
+  setIsAdmin(false); // 訪客不要管理員權限；要開再改 true
+  setLoading(false);
+  return;
+}
+
+
+  if (!auth) {
+    setLoading(false);
+    return;
+  }
+
+  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    if (currentUser) {
+      const adminDocRef = doc(db, 'admins', currentUser.uid);
+      const adminDocSnap = await getDoc(adminDocRef);
+      setIsAdmin(adminDocSnap.exists());
+      setUser(currentUser);
+    } else {
+      setUser(null);
+      setIsAdmin(false);
     }
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (currentUser) {
-        const adminDocRef = doc(db, 'admins', currentUser.uid);
-        const adminDocSnap = await getDoc(adminDocRef);
-        setIsAdmin(adminDocSnap.exists());
-        setUser(currentUser);
-      } else {
-        setUser(null);
-        setIsAdmin(false);
-      }
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+    setLoading(false);
+  });
+
+  return () => unsubscribe();
+}, []);
+
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -765,18 +781,29 @@ export default function App() {
     } finally { setIsSubmitting(false); }
   };
 
-  const handleLogout = async () => { await signOut(auth); setPage('practice'); };
+  const handleLogout = async () => {
+  if (!GUEST_MODE && auth) {
+    await signOut(auth);
+  }
+  setPage('practice');
+};
 
   const renderContent = () => {
-    if (!user) return null;
-    switch (page) {
-      case 'practice': return <PracticeModule userId={user.uid} />;
-      case 'analysis': return <AnalysisModule userId={user.uid} />;
-      case 'reinforcement': return <ReinforcementModule userId={user.uid} />;
-      case 'admin': return isAdmin ? <AdminModule /> : <p>權限不足。</p>;
-      default: return <PracticeModule userId={user.uid} />;
-    }
-  };
+  const activeUser: { uid: string } = (user as any) || { uid: 'guest_user' };
+
+  switch (page) {
+    case 'practice':
+      return <PracticeModule userId={activeUser.uid} />;
+    case 'analysis':
+      return <AnalysisModule userId={activeUser.uid} />;
+    case 'reinforcement':
+      return <ReinforcementModule userId={activeUser.uid} />;
+    case 'admin':
+      return isAdmin ? <AdminModule /> : <p>權限不足</p>;
+    default:
+      return <PracticeModule userId={activeUser.uid} />;
+  }
+};
 
   if (!app) return <div className="min-h-screen bg-red-100 flex items-center justify-center p-4"><div className="bg-white p-8 rounded-lg shadow-lg border-4 border-red-500"><h1 className="text-3xl font-bold text-center text-red-700">系統設定錯誤</h1><p className="text-center text-gray-700 mt-4">您尚未在程式碼中設定有效的 Firebase 金鑰。</p></div></div>
   
@@ -815,7 +842,12 @@ export default function App() {
             {isAdmin && (<a href="#" onClick={(e) => {e.preventDefault(); setPage('admin');}} className={`flex items-center px-4 py-2 mt-5 text-red-700 rounded-md hover:bg-red-100 ${page === 'admin' ? 'bg-red-100' : ''}`}>{icons.admin} <span className="ml-3">管理員後台</span></a>)}
           </nav>
           <div className="p-4 border-t">
-            <div className="flex items-center">{icons.user}<span className="ml-3 text-sm font-semibold">{user.email}</span></div>
+            <div className="flex items-center">
+  {icons.user}
+  <span className="ml-3 text-sm font-semibold">
+    {GUEST_MODE ? '訪客模式' : user?.email}
+  </span>
+</div>
             <button onClick={handleLogout} className="flex items-center w-full px-4 py-2 mt-4 text-sm text-gray-600 rounded-md hover:bg-gray-200">{icons.logout}<span className="ml-3">登出</span></button>
           </div>
         </aside>

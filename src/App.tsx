@@ -121,7 +121,7 @@ let auth!: Auth;
 let db!: Firestore;
 
 // === 訪客模式（不需要帳密）===
-const GUEST_MODE = true;
+const GUEST_MODE = false;
 const DEMO_USER = { uid: 'guest-1', email: '訪客模式' };
 
 

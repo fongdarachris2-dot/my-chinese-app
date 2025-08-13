@@ -1,0 +1,40 @@
+import type { QAItem } from '../types/qa';
+
+export const Q0001: QAItem = {
+  id: 'Q0001',
+  type: 'single-choice',
+  stem_html:
+    '1. （　　）下列文句「　」中的字，字義說明正確的是：<span class="definition">（提示：比較四個詞義）</span>',
+  options: [
+    {
+      key: 'A',
+      text_html: '不堪其苦，「陰」<span class="definition">（陰暗的天色、陰影）</span>',
+      translation: '白話：吃苦難耐，私下起了回家的念頭。',
+    },
+    {
+      key: 'B',
+      text_html: '「乃爾」<span class="definition">（無可奈何）</span>寂飲，何不呼嫦娥來',
+      translation: '白話：竟然獨自喝酒，何不呼嫦娥一起來呢？',
+    },
+    {
+      key: 'C',
+      text_html: '仙仙乎！而還乎？而「幽」<span class="definition">（幽禁、囚困）</span>我於廣寒乎',
+      translation: '白話：仙女啊！是回人間，還是幽禁我在廣寒宮呢？',
+    },
+    {
+      key: 'D',
+      text_html: '遂助「資斧」<span class="definition">（刀斧兵器）</span>遣之歸',
+      translation: '白話：於是幫助他旅費，送他回家。',
+    },
+  ],
+  answer: 'C',
+  explanation:
+    '「幽」＝幽禁、囚困（語境：幽我於廣寒）。A 應作「暗中、私下」；B 「乃爾」＝如此、竟然；D 「資斧」＝資財、旅費。',
+  rationales: {
+    A: '把「陰」誤解成天色/陰影；本義應為「暗中、私下」。',
+    B: '把「乃爾」當「無可奈何」；正確是「如此、竟然」。',
+    C: '答對！「幽」＝幽禁、囚困，與句義吻合。',
+    D: '把「資斧」當兵器；正確是「旅費、資財」。',
+  },
+  meta: { difficulty: '中', tags: ['字義辨析', '文言字詞'], source: '' },
+};

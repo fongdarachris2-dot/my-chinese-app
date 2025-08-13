@@ -88,13 +88,13 @@ const isMultiCorrect = (chosen: string[], correct: string[]) => {
    3) Firebase 初始化（用 .env）
 ========================= */
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FB_API_KEY as string,
-  authDomain: import.meta.env.VITE_FB_AUTH_DOMAIN as string,
-  projectId: import.meta.env.VITE_FB_PROJECT_ID as string,
-  storageBucket: import.meta.env.VITE_FB_STORAGE_BUCKET as string,
-  messagingSenderId: import.meta.env.VITE_FB_MESSAGING_SENDER_ID as string,
-  appId: import.meta.env.VITE_FB_APP_ID as string,
-  measurementId: import.meta.env.VITE_FB_MEASUREMENT_ID as string,
+  apiKey: "AIzaSyDQ-ioyaPz1uvqQqmWAllu9tVKTWbySAXY",
+  authDomain: "top-student-chinese.firebaseapp.com",
+  projectId: "top-student-chinese",
+  storageBucket: "top-student-chinese.firebasestorage.app",
+  messagingSenderId: "938655596928",
+  appId: "1:938655596928:web:ca9be33c5c083a5f2b4165",
+  measurementId: "G-W6PZ5RW4N9",
 };
 
 let app: FirebaseApp | null = null;
